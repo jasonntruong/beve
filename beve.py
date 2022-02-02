@@ -96,6 +96,12 @@ async def horoscope(ctx):
     
     await ctx.send("**" + ctx.author.display_name.upper() + "'S HOROSCOPE FOR TODAY**\n" + endOfHoro[0][3:])
 
+#MBTI
+@client.command(breif="Enter your MBTI and get a description")
+async def mbti(ctx):
+    messages = ctx.message.content.split(" ")
+    mbti = messages[2].lower()
+    await ctx.send(file=discord.File('MBTI/'+mbti.lower()+'.jpg'))
 
 @client.event
 async def on_message(message):
