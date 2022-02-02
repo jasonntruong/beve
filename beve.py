@@ -101,6 +101,7 @@ async def horoscope(ctx):
 async def mbti(ctx):
     messages = ctx.message.content.split(" ")
     mbti = messages[2].lower()
+    
     await ctx.send(file=discord.File('MBTI/'+mbti.lower()+'.jpg'))
 
 @client.event
