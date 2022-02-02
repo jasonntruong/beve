@@ -12,10 +12,8 @@ import json
 
 load_dotenv()
 
-botJSON = open("beve/data.json")
+botJSON = open("beve/data.json", "r+")
 botData = json.load(botJSON)
-y = {"pin":110096}
-botData.load(y)
 #json.dumps(botData)
 TOKEN = botData["token"]
 
@@ -28,6 +26,12 @@ intents.members = True
 client = commands.Bot(intents=intents, command_prefix = 'beve.')
 
 #GENERAL FUNCTIONS
+def editJSON(key, data):
+    botData[key] = data
+    botJSON.seek(0)
+    json.dump(botData, botJSON)
+    botJSON.truncate()
+
 
 #DISCORD FUNCTIONS
 @client.event
