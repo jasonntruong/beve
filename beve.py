@@ -7,14 +7,13 @@ from datetime import datetime
 import discord
 import os
 import asyncio
-
+import requests
 import json
 
 load_dotenv()
 
-botJSON = open("beve/data.json", "r+")
+botJSON = open("data.json", "r+")
 botData = json.load(botJSON)
-#json.dumps(botData)
 TOKEN = botData["token"]
 
 send = False
@@ -23,7 +22,7 @@ serverMembers = set()
 
 intents = discord.Intents.default()
 intents.members = True
-client = commands.Bot(intents=intents, command_prefix = 'beve.')
+client = commands.Bot(intents=intents, command_prefix='beve ')
 
 #GENERAL FUNCTIONS
 def editJSON(key, data):
@@ -31,7 +30,6 @@ def editJSON(key, data):
     botJSON.seek(0)
     json.dump(botData, botJSON)
     botJSON.truncate()
-
 
 #DISCORD FUNCTIONS
 @client.event
@@ -61,7 +59,7 @@ async def animeReminder(channel):
 @animeReminder.before_loop
 async def before_animeReminder():
     global send, announcement, serverMembers
-    print(serverMembers)
+    await client.wait_until_ready()
     for i in range(60*24):
         now = datetime.now()
         current_time = now.strftime("%w:%H:%M")
@@ -81,11 +79,28 @@ async def before_animeReminder():
                 return
         await asyncio.sleep(60)
 
+#HOROSCOPE
+@client.command(brief="Enter your birthday MM/DD and get your daily horoscope")
+async def horoscope(ctx):
+    zodaicToNum = ["aries", "taurus", "gemini", "cancer", "leo", "virgo", "libra", "scorpio", "sagittarius", "capricorn", "aquarius", "pisces"]
+    messages = ctx.message.content.split(" ")
+    zodiac = messages[2].lower()
+
+    #web scrape
+    URL = "https://www.horoscope.com/us/horoscopes/general/horoscope-general-daily-today.aspx?sign=" + str(zodaicToNum.index(zodiac)+1)
+    horoscopePage = requests.get(URL)
+
+    #since no ID for the actual horoscope
+    startOfHoro = horoscopePage.text.split("</strong>")
+    endOfHoro = startOfHoro[1].split("</p>")
+    
+    await ctx.send("**" + ctx.author.display_name.upper() + "'S HOROSCOPE FOR TODAY**\n" + endOfHoro[0][3:])
+
+
 @client.event
 async def on_message(message):
-    # await client.process_commands(message)
-
-    if message.content == 'beve.hi':
-        await message.channel.send('hi')
+    await client.process_commands(message)
+    # if message.content == 'beve.hi':
+    #     await message.channel.send('hi')
 
 client.run(TOKEN)
