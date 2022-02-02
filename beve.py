@@ -80,7 +80,7 @@ async def before_animeReminder():
         await asyncio.sleep(60)
 
 #HOROSCOPE
-@client.command(brief="Enter your birthday MM/DD and get your daily horoscope")
+@client.command(brief="Enter your zodiac and get your daily horoscope")
 async def horoscope(ctx):
     zodaicToNum = ["aries", "taurus", "gemini", "cancer", "leo", "virgo", "libra", "scorpio", "sagittarius", "capricorn", "aquarius", "pisces"]
     messages = ctx.message.content.split(" ")
@@ -97,7 +97,7 @@ async def horoscope(ctx):
     await ctx.send("**" + ctx.author.display_name.upper() + "'S HOROSCOPE FOR TODAY**\n" + endOfHoro[0][3:])
 
 #MBTI
-@client.command(breif="Enter your MBTI and get a description")
+@client.command(brief="Enter your MBTI and get a description")
 async def mbti(ctx):
     messages = ctx.message.content.split(" ")
     mbti = messages[2].lower()
