@@ -17,7 +17,6 @@ def getFace(allVals):
 
     #image to find a face in
     imageToDetect = cv2.imread('/home/pi/beve/FaceRecognition/imageToDetect.png')   #user given face will be downloaded here
-    print("image found")
 
     rgb =cv2.cvtColor(imageToDetect, cv2.COLOR_BGR2RGB)
     faceEncodings = face_recognition.face_encodings(rgb)
@@ -31,7 +30,7 @@ def getFace(allVals):
 
         #if user wants all user distances/values
         if allVals == True:
-            whoMsg = "Here's **what I** see: "
+            whoMsg = "Here's what I see:\n"
             for i in range(len(faceMatches)):
                 distance = np.linalg.norm(encoding - faceData["encodings"][i])
                 percentMatch = (1 - distance)*100
@@ -39,7 +38,7 @@ def getFace(allVals):
         
         #if there is a match between dataset faces and the user given face
         elif True in faceMatches:
-            whoMsg = "I **definitely** see: "
+            whoMsg = "I definitely see: "
             for i in range(len(faceMatches)):
                 if faceMatches[i] == True:
                     whoMsg += faceData["names"][i] + ", "
@@ -47,8 +46,7 @@ def getFace(allVals):
         
         #if no match and user doesn't want all values, print the closest face amongst the dataset
         elif allVals == False:
-            print("F")
-            whoMsg = "I **think I** see: "
+            whoMsg = "I think I see: "
             for i in range(len(faceMatches)):
                 distance = np.linalg.norm(encoding - faceData["encodings"][i])
 

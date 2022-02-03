@@ -9,6 +9,11 @@ import os
 import asyncio
 import requests
 import json
+import sys
+
+sys.path.insert(0, '/home/pi/beve/FaceRecognition')
+
+from facialrec import getFace
 
 load_dotenv()
 
@@ -106,10 +111,21 @@ async def mbti(ctx):
 
 @client.event
 async def on_message(message):
-    await client.process_commands(message)
+    imgExt = ["png", "jpg", "jpeg"]
     # if message.content == 'beve.hi':
     #     await message.channel.send('hi')
-    # if message.attachement:
+    if message.content == ('beve sees'):
+        if any(message.attachments[0].filename.lower().endswith(ext) for ext in imgExt):
+            await message.attachments[0].save("/home/pi/beve/FaceRecognition/imageToDetect.png")
+            await message.channel.send("Yo " + message.author.display_name + ",\n" + getFace(False))
+    
+    if message.content == ('beve sees all'):
+        if any(message.attachments[0].filename.lower().endswith(ext) for ext in imgExt):
+            await message.attachments[0].save("/home/pi/beve/FaceRecognition/imageToDetect.png")
+            await message.channel.send("Yo " + message.author.display_name + ",\n" + getFace(True))
 
+    else:
+        await client.process_commands(message)
+        
 
 client.run(TOKEN)
