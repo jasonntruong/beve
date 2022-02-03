@@ -18,13 +18,16 @@ for facePath in facePaths:
     boxes = face_recognition.face_locations(rgb, model='hog')
     encodings = face_recognition.face_encodings(rgb, boxes) #face encodings that determine faces
 
+    #append data to respective arrays
     for encoding in encodings:
         faceEncodings.append(encoding)
         names.append(name)
 
+#add to dictionary and store it in an encodings file
 data = {"encodings": faceEncodings, "names": names}
-print(data)
 
 f = open("/home/pi/beve/FaceRecognition/encodings", "wb")
 f.write(pickle.dumps(data))
 f.close()
+
+print(data)
