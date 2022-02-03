@@ -12,7 +12,7 @@ import json
 
 load_dotenv()
 
-botJSON = open("data.json", "r+")
+botJSON = open("/home/pi/beve/data.json", "r+")
 botData = json.load(botJSON)
 TOKEN = botData["token"]
 
@@ -102,12 +102,14 @@ async def mbti(ctx):
     messages = ctx.message.content.split(" ")
     mbti = messages[2].lower()
     
-    await ctx.send(file=discord.File('MBTI/'+mbti.lower()+'.jpg'))
+    await ctx.send(file=discord.File('/home/pi/beve/MBTI/'+mbti.lower()+'.jpg'))
 
 @client.event
 async def on_message(message):
     await client.process_commands(message)
     # if message.content == 'beve.hi':
     #     await message.channel.send('hi')
+    # if message.attachement:
+
 
 client.run(TOKEN)
