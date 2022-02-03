@@ -1,4 +1,5 @@
 data.json
 nohup.out
 FaceRecognition/encodings
+FaceRecognition/imageToDetect.png
 FaceRecognition/facesdataset/

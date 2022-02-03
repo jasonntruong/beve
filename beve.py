@@ -112,8 +112,7 @@ async def mbti(ctx):
 @client.event
 async def on_message(message):
     imgExt = ["png", "jpg", "jpeg"]
-    # if message.content == 'beve.hi':
-    #     await message.channel.send('hi')
+
     if message.content == ('beve sees'):
         if any(message.attachments[0].filename.lower().endswith(ext) for ext in imgExt):
             await message.attachments[0].save("/home/pi/beve/FaceRecognition/imageToDetect.png")
