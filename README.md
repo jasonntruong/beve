@@ -9,4 +9,4 @@ Using "beve sees" followed by an attached image, beve will reply with who in the
 Whenever an episode of an anime we are tracking comes out (i.e Attack on Titan or Demon Slayer), beve will ping the watchers.
 
 # Horoscope
-Entering "beve horoscope your_horoscope" will retrieve your horoscope from https://www.horoscope.com/us/index.aspx , a horoscope website which is updated daily
+Entering "beve horoscope your_horoscope" will scrape your horoscope from https://www.horoscope.com/us/index.aspx , a horoscope website which is updated daily
