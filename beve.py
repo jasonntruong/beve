@@ -10,6 +10,7 @@ import asyncio
 import requests
 import json
 import sys
+import random
 
 sys.path.insert(0, '/home/pi/beve/FaceRecognition')
 
@@ -24,10 +25,15 @@ TOKEN = botData["token"]
 send = False
 announcement = ""
 serverMembers = set()
+pomoOn = True
 
 intents = discord.Intents.default()
 intents.members = True
 client = commands.Bot(intents=intents, command_prefix='beve ')
+
+oldChapo = [360233756738584576, 297555807200083988]
+
+channelName = {327597608111570947: "D", 820371352694947850: "zuck ma dong", 888863361268326490: "meanie beanie", 756191311505391627: "York bois", 756676813920403496: "Demon Time", 893392467968282735: "Sleep Date", 902716252139687946: "study date", 937599329567391744: "Sad boy hour"}
 
 #GENERAL FUNCTIONS
 def editJSON(key, data):
@@ -81,7 +87,6 @@ async def before_animeReminder():
                             announcement += "{} ".format(serverMember.mention)
                 
                 send = True
-                return
         await asyncio.sleep(60)
 
 #HOROSCOPE
@@ -125,6 +130,89 @@ async def on_message(message):
 
     else:
         await client.process_commands(message)
+
+#POMODORO
+@client.command(brief="start pomodoro; beve pomostart workTime breakTime")
+async def pomostart(ctx):
+    global pomoOn
+    pomoOn = pomoOn
+    working = True
+    time = 0
+
+    messages = ctx.message.content.split(" ")
+    workTime = int(messages[2])
+    breakTime = int(messages[3])
+
+    await ctx.author.edit(deafen=True)
+    await ctx.author.edit(mute=True)
+
+    while time < workTime:
+        if pomoOn:
+            await asyncio.sleep(1)
+            time += 1
+        else:
+            pomoOn = True
+            await ctx.author.edit(deafen=False)
+            await ctx.author.edit(mute=False)
+            return
+
+    await ctx.author.edit(deafen=False)
+    await ctx.author.edit(mute=False)
+    await asyncio.sleep(breakTime)
+    await pomostart(ctx)
+
+@client.command(brief="stop pomodoro")
+async def pomostop(ctx):
+    global pomoOn
+    pomoOn = False
+
+#ROULETTE
+@client.command(brief="beve randomnly deafens someone for 5-10 seconds")
+async def roulette(ctx):
+    if ctx.author.id in oldChapo:
+        allConnectedMembers = ctx.author.voice.channel.members
         
+        unluckyMember = random.choice(allConnectedMembers)
+        time = random.randint(5, 10)
+
+        await ctx.send(unluckyMember.display_name + " has been chosen. Enjoy the silent void for " + str(time) + " seconds")
+        await unluckyMember.edit(deafen=True)
+        await unluckyMember.edit(mute=True)
+
+        await asyncio.sleep(time)
+
+        await unluckyMember.edit(deafen=False)
+        await unluckyMember.edit(mute=False)
+
+#BUS
+@client.command(brief="beve takes you on a bus trip")
+async def bus(ctx):
+    route = []
+    allVC = botData["chats"]["allVoiceID"]
+
+    userVC = ctx.author.voice.channel.id
+    indexVC = allVC.index(userVC)
+    routeMsg = "Our route: "
+
+    for i in range (indexVC+1, len(allVC)):
+        route.append(allVC[i])
+        routeMsg += channelName[allVC[i]] + " -> "
+    
+    for i in range (0, indexVC+1):
+        route.append(allVC[i])
+        routeMsg += channelName[allVC[i]] + " -> "
+    
+    await ctx.send(routeMsg[:-4])
+    for i in range(len(route)):
+        vc = client.get_channel(route[i])
+        await ctx.author.move_to(vc)
+        await asyncio.sleep(2)
+
+#PICK
+@client.command(brief="picks a RNRandomness Valorant agent")
+async def pick(ctx):
+    allVal = ["Astra", "Breach", "Brimstone", "Cypher", "Jett", "KAY/O", "Killjoy", "Omen", "Phoenix", "Raze", "Reyna", "Sage", "Skye", "Sova", "Viper", "Yoru", "Chamber", "Neon"]
+
+    await ctx.send("**" + str(ctx.message.author.display_name) +  "** got: " + allVal[random.randrange(0,len(allVal))])
 
 client.run(TOKEN)

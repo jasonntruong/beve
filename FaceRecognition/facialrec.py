@@ -1,3 +1,4 @@
+import sys
 import imutils
 import face_recognition
 import pickle
@@ -30,7 +31,7 @@ def getFace(allVals):
 
         #if user wants all user distances/values
         if allVals == True:
-            whoMsg = "Here's what I see:\n"
+            whoMsg = "\nHere's what I see:"
             for i in range(len(faceMatches)):
                 distance = np.linalg.norm(encoding - faceData["encodings"][i])
                 percentMatch = (1 - distance)*100
