@@ -24,9 +24,7 @@ load_dotenv()
 botJSON = open("/home/pi/beve/data.json", "r+")
 botData = json.load(botJSON)
 TOKEN = botData["token"]
-print(TOKEN)
 
-print("here")
 toSend = False
 announcement = ""
 serverMembers = set()
@@ -39,7 +37,6 @@ client = commands.Bot(intents=intents, command_prefix='beve ')
 oldChapo = [360233756738584576, 297555807200083988]
 
 channelName = {327597608111570947: "D", 820371352694947850: "zuck ma dong", 888863361268326490: "meanie beanie", 756191311505391627: "York bois", 756676813920403496: "Demon Time", 893392467968282735: "Sleep Date", 902716252139687946: "study date", 937599329567391744: "Sad boy hour"}
-print("here")
 
 #GENERAL FUNCTIONS
 def editJSON(key, data):
@@ -52,7 +49,6 @@ def editJSON(key, data):
 @client.event
 async def on_ready():
     global serverMembers
-    print("here")
 
     main_text = client.get_channel(botData["chats"]["main_text"])
     
@@ -94,7 +90,6 @@ async def animeReminder(channel):
     for i in range(60*24):
         now = datetime.now()
         current_time = now.strftime("%w:%H:%M")
-        print(current_time)
         for anime in botData["animes"]:
             if current_time == anime["date"]:
                 announcement = "**NEW EPISODE FOR " + anime["name"] + " OUT NOW!!**\n--------------------------------------------------\n\n"
@@ -103,10 +98,7 @@ async def animeReminder(channel):
                 for member in anime["ping"]:
                     for serverMember in serverMembers:
                         if member == str(serverMember):
-                            print(serverMember)
-                            announcement += "{} ".format(serverMember.mention)
-                print(announcement)
-                
+                            announcement += "{} ".format(serverMember.mention)                
                 await channel.send(announcement)
         await asyncio.sleep(60)
 
@@ -146,13 +138,11 @@ async def sleepy(ctx):
 
     messages = ctx.message.content.split(" ")
     sleeptime = int(messages[2])*60
-    print(sleeptime)
     await ctx.send("You'll be kicked in " + messages[2] + " minutes")
     while time < sleeptime:
         await asyncio.sleep(1)
         time += 1
     
-    print(time)
     await ctx.send("Goodnight from " + ctx.author.display_name)
     await ctx.author.move_to(None)
 
@@ -270,7 +260,5 @@ async def on_message(message):
 
     else:
         await client.process_commands(message)
-print("here2")
 
 client.run(TOKEN)
-print("here2")
